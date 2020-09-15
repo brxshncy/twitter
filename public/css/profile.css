@@ -1,0 +1,115 @@
+.cover-photo{
+    min-width:600px;
+    min-height:200px;
+    background:rgb(61,84,102);
+}
+.profile-info{
+    min-width:600px;
+    max-height:276px;
+    background:rgb(21,32,43);
+  
+}
+.header-profile{
+    display:flex;
+    justify-content: space-between;
+    padding:10px;
+    height:49px;
+}
+.img-container{
+    width: 134px;
+    height:134px;
+    background:rgb(21,32,43);
+    position:relative;
+    top:-80px;
+    border-radius:50%;
+    padding:4px;
+    text-align:center;
+}
+.header-profile img{
+    height:95%;
+    width:95%;
+    border-radius:50%;
+    object-fit: cover;
+}
+.edit-btn button{
+   border:1px solid rgb(29,161,242);
+   outline:none;
+   background:none;
+   color:rgb(29,161,242);
+   padding:8px 15px;
+   font-weight:bold;
+   border-radius:25px;
+   cursor: pointer;
+}
+.info{
+    display:flex;
+    color:#fff;
+    flex-direction:column;
+    padding:10px 20px;
+    padding-bottom:0px;
+}
+.info h4{
+    color:#fff;
+    font-weight:800;
+    margin-bottom:0 !important;
+    font-size:1.3rem;
+    letter-spacing: 2px;
+}
+.info h5{
+    color:#fff;
+    margin-bottom:0 !important;
+    font-weight:400;
+    font-size:1.2rem;
+}
+.info span{
+    color:rgb(115,131,143);
+}
+.other-info{
+    display:flex;
+    align-items:center;
+    margin-top:10px;
+    color:rgb(115,131,143);
+}
+.other-info i{
+    margin-right:10px
+}
+.other-info span{
+    margin-right:10px;
+}
+.stats{
+    margin-top:10px;
+}
+.stats span{
+    margin-right:10px;
+}
+.stats b{
+    color:#fff;
+}
+.activity{
+    margin-top:20px;
+    width:100%;
+    flex:1;
+    padding:0 !important;
+}
+.activity ul{
+    display:flex;
+    justify-content: space-between;
+    width:100%;
+    
+}
+.activity ul li{
+    padding-bottom:12px;
+    margin-top:20px;
+    width:100%;
+    margin-right:10px;
+    text-align:center;
+    font-weight:bold;
+    color:rgb(136,153,166);
+}
+.activity ul li:hover{
+    border-bottom:2px solid rgb(29,161,242);
+}
+.activity ul li.active{
+    border-bottom:2px solid rgb(29,161,242);
+    color:rgb(29,161,242);
+}
