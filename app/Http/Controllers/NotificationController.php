@@ -18,8 +18,7 @@ class NotificationController extends Controller
                             ->where('f.user_id',Auth::guard('user')->user()->id);
                   })->get();
 
-
-         $retweets = DB::table('retweets as rt')
+        $retweets = DB::table('retweets as rt')
                   ->select('t.tweet as tweet',DB::raw("CONCAT(u.fname,' ',u.lname) as name"),'u.profile_pic as profile_pic','rt.user_id as anon_id','rt.created_at as activity_date','t.user_id as tweet_user_id','t.id as tweet_id')
                   ->leftJoin('users as u','u.id','=','rt.user_id')
                   ->leftJoin('tweets as t','t.id','=','rt.tweet_id');
@@ -38,8 +37,8 @@ class NotificationController extends Controller
                     ->unionAll($retweets)
                     ->where('t.user_id',Auth::guard('user')->user()->id)
                     ->orderBy('activity_date','DESC');
-                    
 
+                    
         $notifs = DB::query()
                   ->select('*', DB::raw(
                     'CASE

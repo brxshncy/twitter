@@ -13,8 +13,6 @@ Home / Twitter
     <div class="feed-header">
         <h5>Home</h5>
     </div>
-
-
     <div class="post-container">
         <div class="user-img">
           @if(Auth::guard('user')->user()->profile_pic === null)
@@ -55,17 +53,17 @@ Home / Twitter
         $myself = App\Retweet::where('user_id',Auth::guard('user')->user()->id )
                                ->where('tweet_id',$tweet->tweet_id)->first();
     @endphp
-@if($myself)
-    <span style="color:rgb(169,174,182); font-size:small;">   
-        <i class="fas fa-retweet"></i> You retweeted
-    </span>
- @else
-    <span style="color:rgb(169,174,182); font-size:small;">   
-        <i class="fas fa-retweet"></i> retweeted
-    </span>
-    <small style="color:#fff">{{ ucwords($tweet->fullname) }}</small>
-    <input type="hidden" class="user_id" value={{ Auth::guard('user')->user()->id}}>
-@endif
+        @if($myself)
+            <span style="color:rgb(169,174,182); font-size:small;">   
+                <i class="fas fa-retweet"></i> You retweeted
+            </span>
+        @else
+            <span style="color:rgb(169,174,182); font-size:small;">   
+                <i class="fas fa-retweet"></i> retweeted
+            </span>
+            <small style="color:#fff">{{ ucwords($tweet->fullname) }}</small>
+            <input type="hidden" class="user_id" value={{ Auth::guard('user')->user()->id}}>
+        @endif
 </div>
     <div class="feed-tweet-x">
             <div class="tweet-img">
@@ -103,7 +101,7 @@ Home / Twitter
     </div>
     <div class="tweet-post">
         <div class="user-info">
-                <b>{{ ucwords($tweet->fullname) }}</b>
+            <a href="{{ route('profile',$tweet->tweet_user_id)  }}" style="color:#fff; text-decoration:none;"><b>{{ ucwords($tweet->fullname) }}</b></a>
                 <input type="hidden" class="user_id" value={{ Auth::guard('user')->user()->id}}>
                 <span style="color:rgb(169,174,182);">
                         {{ '@'.$tweet->username .". "}}{{Carbon\Carbon::create($tweet->created_at)->diffForHumans()}}
@@ -146,11 +144,13 @@ Home / Twitter
                     {{ $likes > 0 ? $likes : '' }}
                 </span>
             </div>
-                <a href="{{ route('view-thread',$tweet->tweet_id) }}">
-                    <button title="View Thread">
-                            <i class="far fa-eye"></i>
-                    </button>
-                </a>
+                <div>
+                    <a href="{{ route('view-thread',$tweet->tweet_id) }}">
+                        <button title="View Thread">
+                                <i class="far fa-eye"></i>
+                        </button>
+                    </a>
+                </div>
             </div>
     </div>
 @endif

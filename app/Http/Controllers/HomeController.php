@@ -65,7 +65,7 @@ class HomeController extends Controller
         return redirect('home');
     }
     public function profile($id){
-        $people = DB::table('users as u')
+    $people = DB::table('users as u')
                 ->select(DB::raw("CONCAT(u.fname,' ',u.lname) as fullName"),'u.username as username','u.id as userId','u.profile_pic as profile_pic')
                 ->whereNotIn('id',[$id])
                 ->whereNotin('id',function($query) use($id){
@@ -74,9 +74,36 @@ class HomeController extends Controller
                           ->where('f.user_id',$id);
                 })
                 ->get();
-        $profile = User::where('id',$id)->first();
-       return view('profile')->with('people',$people)
-                             ->with('profile',$profile);
+                $retweets = DB::table('retweets as rt')
+                ->select('t.tweet as tweet',DB::raw("CONCAT(u.fname,' ',u.lname) as name"),'u.username as username','t.created_at as date','u.profile_pic as profile_pic',
+                    't.id as tweet_id','rt.user_id as tweet_user_id')
+                ->leftJoin('tweets as t','t.id','=','rt.tweet_id')
+                ->leftJoin('users as u','rt.user_id','=','u.id')
+                ->where('rt.user_id','=',Auth::guard('user')->user()->id);
+                
+    $union = DB::table('tweets as t')
+                ->select('t.tweet',DB::raw("CONCAT(u.fname,' ',u.lname) as name"),'u.username as username','t.created_at as date','u.profile_pic as profile_pic',
+                    't.id as tweet_id','t.user_id as tweet_user_id')
+                ->leftJoin('users as u','u.id','=','t.user_id')
+                ->unionAll($retweets)
+                ->where('t.user_id',$id)
+                ->orderBy('date','DESC');
+                
+    $tweets = DB::query()
+                  ->select('*',DB::raw(
+                      'CASE
+                            WHEN tweet_id IN (SELECT t.id FROM tweets as t WHERE t.user_id = tweet_user_id)
+                                THEN "original" ELSE "retweet"
+                       END as context
+                      '
+                  ))
+                  ->from($union)
+                  ->get();
+        
+    $profile = User::where('id',$id)->first();
+    return view('profile')->with('people',$people)
+                          ->with('profile',$profile)
+                          ->with('tweets',$tweets);
     }
     public function editProfile(Request $request,$id){
        if($request->profile_pic != null){
