@@ -31,7 +31,9 @@
                 @endif
             </div>
            <div class="edit-btn">
-               <button type="button" data-toggle="modal" data-target="#exampleModal">Edit Profile</button>
+                @if(Auth::guard('user')->user()->id == $profile->id)
+                    <button type="button" data-toggle="modal" data-target="#exampleModal">Edit Profile</button>
+               @endif
            </div>
         </div>
         <div class="info">

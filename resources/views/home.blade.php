@@ -1,3 +1,4 @@
+<!-- In this view, I have made some filtering queries by using Query Builder -->
 @extends('layouts.main')
 @section('title')
 Home / Twitter
@@ -36,10 +37,17 @@ Home / Twitter
     </div>
 
 
-@if(count($tweets) > 0)
+@if(count($tweets) > 0) <!-- loop through each tweets that is being passed in from HomeController -->
     @foreach($tweets as $tweet)
 <div class="feed-tweet  <?php echo $tweet->context === 'retweet' ? 'nocaption' : ''  ?>">
+<!---  My query retrieves all the tweets and then I filtered out if the tweet is an original tweet or a retweet.
+       I filtered it out because I have dedicated css for both original tweets and retweeted tweets.
+       Just like the current Twitter App.
+--->
 @if($tweet->context ==='retweet')
+<!-- 
+    I  retrieve the user of the tweet that is being retweeted.
+-->
             @php
                 $orig = DB::table('tweets as t')
                        ->select('u.profile_pic as profile_pic',DB::raw('CONCAT(u.fname," ",u.lname) as name'),'u.username as username','rt.created_at as date_posted')
@@ -49,6 +57,7 @@ Home / Twitter
                        ->first();
             @endphp
 <div class="user-info" style="padding:0 30px 5px">
+    <!--  Check if this specific retweet is being retweeted by the current logged in user -->
     @php
         $myself = App\Retweet::where('user_id',Auth::guard('user')->user()->id )
                                ->where('tweet_id',$tweet->tweet_id)->first();
@@ -67,6 +76,7 @@ Home / Twitter
 </div>
     <div class="feed-tweet-x">
             <div class="tweet-img">
+                <!--  I have dedicated Image for users who don't upload their  picture just like you see on modern Social Media Apps -->
                 @if($orig->profile_pic === null)
                     <img src="{{ asset('img/no-pic.png') }}"alt=""> 
                 @else 
@@ -75,6 +85,7 @@ Home / Twitter
             </div>
             <div class="tweet-post">
                 <div class="user-info">
+                    <!-- I display the original user info from the tweet that is being retweeted !-->
                     <b>{{ ucwords($orig->name) }}</b>
                     <input type="hidden" class="user_id" value={{ Auth::guard('user')->user()->id}}>
                     <span style="color:rgb(169,174,182);">
@@ -91,6 +102,7 @@ Home / Twitter
                 </div>
             </div>
     </div>
+<!-- If the tweet is orignal then display the user info of the tweet -->
 @elseif($tweet->context === 'original')
     <div class="tweet-img">
         @if($tweet->profile_pic === null)
@@ -111,6 +123,8 @@ Home / Twitter
                     <p>{{ $tweet->tweet }}</p>
         </div>
         <div class="action">
+            <!--  My project has comment,retweet, like functionalities just like the modern twitter-app  -->
+            <!--  In frontend I have dedicated CSS if the current user liked, commented, or retweeted the tweet that is being displayed -->
             <div class="c-div">
                 <button data-toggle="modal" data-target="#tweet{{  $tweet->tweet_id }}">
                     <i class="far fa-comment {{ App\Comment::where('user_id',Auth::guard('user')->user()->id)->where('tweet_id',$tweet->tweet_id)->first() ? 'active' : '' }}"></i>
@@ -118,7 +132,7 @@ Home / Twitter
                             $comments = App\Tweet::find($tweet->tweet_id)->numComment();
                         @endphp
                     <span class="num-comments {{ App\Comment::where('user_id',Auth::guard('user')->user()->id)->where('tweet_id',$tweet->tweet_id)->first() ? 'active' : '' }}">
-                        {{ $comments > 0 ? $comments : '' }}
+                        {{ $comments > 0 ? $comments : '' }} <!-- display the total comments of the specific tweet !-->
                     </span>
                 </button>
             </div>
@@ -129,7 +143,7 @@ Home / Twitter
                             $retweets = App\Tweet::find($tweet->tweet_id)->numRetweet();
                         @endphp
                     <span class="num-retweets {{ App\Retweet::where('user_id',Auth::guard('user')->user()->id)->where('tweet_id',$tweet->tweet_id)->first() ? 'active' : '' }}">
-                        {{ $retweets > 0 ? $retweets : '' }}
+                        {{ $retweets > 0 ? $retweets : '' }} <!-- display the total retweets of the specific tweet !-->
                     </span>
                 </button>
             </div>
@@ -141,7 +155,7 @@ Home / Twitter
                     $likes = App\Tweet::find($tweet->tweet_id)->getLikes();
                 @endphp
                 <span class="num-likes {{App\Like::where('user_id',Auth::guard('user')->user()->id)->where('tweet_id',$tweet->tweet_id)->first() ? 'active' : ''}}" id="{{ $tweet->tweet_id }}">
-                    {{ $likes > 0 ? $likes : '' }}
+                    {{ $likes > 0 ? $likes : '' }} <!-- display the total likes of the specific tweet !-->
                 </span>
             </div>
                 <div>
@@ -154,7 +168,7 @@ Home / Twitter
             </div>
     </div>
 @endif
-
+        <!-- including some modals -->
         <!-- Modal -->
             @include('modals.comment')
             @include('modals.retweet')

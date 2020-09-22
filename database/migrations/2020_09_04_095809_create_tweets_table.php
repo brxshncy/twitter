@@ -15,8 +15,8 @@ class CreateTweetsTable extends Migration
     {
         Schema::create('tweets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->longText('tweet')->nullable();
+            $table->foreignId('user_id'); // user_id of the tweet 
+            $table->longText('tweet')->nullable(); // tweet can be nullable
             $table->timestamps();
         });
     }

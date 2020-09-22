@@ -11,14 +11,18 @@
             <div class="people">
                 <div class="people-img">
                     @if($person->profile_pic === NULL)
-                        <img src="{{ asset('img/no-pic.png') }}" alt="">
+                        <a href="{{ route('profile',$person->userId) }}">
+                            <img src="{{ asset('img/no-pic.png') }}" alt="">
+                       
                     @else
+                        <a href="{{ route('profile',$person->userId) }}">
                          <img src="{{ asset('uploads/')."/".$person->profile_pic }}" alt="">
+                        </a>
                     @endif
                 </div>
                 <div class="people-info">
                     <div class="name">
-                    <p>{{$person->fullName}}</p>
+                        <a href="{{ route('profile',$person->userId) }}" style="color:#fff;"> <p>{{$person->fullName}}</p> </a>
                         <span>{{ "@".$person->username }}</span>
                         <input type="hidden" class="currUserId" id="currUserId" value="{{ Auth::guard('user')->user()->id }}">
                         <input type="hidden" class="following_user_id" id="{{ $person->userId }}"  value="{{ $person->userId }}">
@@ -36,7 +40,7 @@
                         </small>
                     </div>
                     <div class="f-btn">
-                    <button class="follow" id="{{$person->userId }}">Follow</button>
+                        <button class="follow" id="{{$person->userId }}">Follow</button>
                     </div>
                 </div>
             </div>

@@ -12,7 +12,7 @@ Route::get('signup','LoginController@signup')->name('signup');
 Route::post('signup','LoginController@signup')->name('post-signup');
 Route::get('logout','LoginController@logout')->name('logout');
 Route::group(['middleware' => ['user']],function(){
-    Route::get('home','HomeController@home')->name('home');
+    Route::get('home','HomeController@home')->name('home');  //Routing
     Route::post('home','HomeController@postTweet')->name('post-tweet');
     Route::get('people','HomeController@people')->name('who_to_follow');
     Route::get('profile/{id}','HomeController@profile')->name('profile');
@@ -25,15 +25,4 @@ Route::group(['middleware' => ['user']],function(){
     Route::get('view-thread/{tweet_id}','ThreadController@thread')->name('view-thread');
     Route::get('notification','NotificationController@index')->name('notifications');
     Route::get('message','MessageController@message')->name('message');
-});
-
-
-Route::get('x',function(){
-
-    $profile = 1;
-    $following = DB::table('followings as f')
-                 ->select(DB::raw("COUNT(following_user_id) as following"))
-                 ->where('user_id',$profile)
-                 ->first();
-    return $following->following;
 });

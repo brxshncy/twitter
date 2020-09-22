@@ -1,7 +1,10 @@
 <div class="side-bar">
     <nav class="main-nav">
         <header>
-            <i class="fab fa-twitter"></i>
+            <a href="{{ route('home') }}">
+                <i class="fab fa-twitter"></i>
+            </a>
+           
         </header>
         <ul>
         <li class="<?php  echo $title === 'home' ? 'active' : '' ?>"> <a href="{{ route('home') }}" ><i class="fas fa-home"></i>Home</a> </li>

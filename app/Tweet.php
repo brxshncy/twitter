@@ -8,11 +8,12 @@ class Tweet extends Model
 {
     protected $guarded=[];
 
+    // This is my Tweet Model, the Tweet Model has a eloquent relationship with other Models
     public function likes(){
        return $this->hasMany(Like::class,'tweet_id');
     }
     public function getLikes(){
-        return $this->likes->count();
+        return $this->likes->count(); 
     }
     public function comment(){
         return $this->hasMany(Comment::class,'tweet_id');
